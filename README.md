@@ -28,6 +28,12 @@ At this point you should have the correct environment to interact with the scrip
 
 ### How to train the model
 
+Be sure to have the dependencies installed and just type:
+
+```bash
+python main.py
+```
+
 ### How to build and run the Docker container
 
 To build the container, from the root folder (the one with `Dockerfile`, `requirements.txt` etc) type:
