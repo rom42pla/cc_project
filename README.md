@@ -31,7 +31,7 @@ At this point you should have the correct environment to interact with the scrip
 Be sure to have the dependencies installed and just type:
 
 ```bash
-python main.py
+python train.py
 ```
 
 ### How to build and run the Docker container
