@@ -36,7 +36,7 @@ python train.py
 
 ### How to build and run the Docker container
 
-To build the container, from the root folder (the one with `Dockerfile`, `requirements.txt` etc) type:
+To **build** the container, from the root folder (the one with `Dockerfile`, `requirements.txt` etc) type:
 
 ```bash
 bash scripts/docker_build.sh
