@@ -47,3 +47,10 @@ To **run** the container, from the root folder type:
 ```bash
 bash scripts/docker_run.sh
 ```
+To **run** the preprocessing in bash on a single month dataset:
+
+```bash
+python3 /pathtoscript/preprocessing.py filename.csv
+```
+
+notice: the original file will be overwritten.
