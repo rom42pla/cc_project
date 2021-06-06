@@ -47,10 +47,19 @@ To **run** the container, from the root folder type:
 ```bash
 bash scripts/docker_run.sh
 ```
-To **run** the preprocessing in bash on a single month dataset:
+To run the preprocessing and create the scheduler:
 
-```bash
-python3 /pathtoscript/preprocessing.py filename.csv
+```bash 
+bash s3_bucket/preprocessing.py 
 ```
 
-notice: the original file will be overwritten.
+notice: config file, test files and output examples are provided
+
+To train:
+
+```bash 
+bash s3_bucket/train_batch.py -d $day -i $iterations
+```
+
+notice: not working, must adapt training script (to be discussed)
+
