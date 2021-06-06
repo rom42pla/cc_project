@@ -39,7 +39,7 @@ def __main__():
     df = remapping(df,'product_id')
     df = remapping(df,'category_id')
     df = remapping(df,'user_id')
-    df.to_csv(file,index=False)
+    df.to_csv('proc_'+file,index=False)
     
    
 __main__()
