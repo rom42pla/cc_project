@@ -63,3 +63,4 @@ bash s3_bucket/train_batch.py -d $day -i $iterations
 
 notice: not working, must adapt training script (to be discussed)
 
+![img](workflow.png)
