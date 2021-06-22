@@ -11,6 +11,25 @@
 
 ## How-tos
 
+### S3 bucket
+
+#### Preprocessing
+This script extracts the month names of the file to be preprocessed according to the 'config.txt' file. Each of the preprocessed files are renamed with a 'proc_' prefix. All processed files are then merged into a single file 'RS_data.csv'. Lastly, based on the first and the last timestamp, the file 'days_scheduler.txt' is created. To run the preprocessing and create the scheduler:
+
+```bash 
+bash s3_bucket/preprocessing.sh 
+```
+
+#### Model training
+This script will iterate though each day (raw in scheduler.txt) and extract the rows corresponding to that day to train the model. At the end of the training the script will sleep for 10 minutes and then train the data corresponding to the next day.
+
+```bash 
+bash s3_bucket/train_scheduler.sh 
+```
+
+![img](workflow.png)
+
+
 ### How to setup the environment
 
 The project is built upon Python 3.8 using the PySpark package.
@@ -47,20 +66,5 @@ To **run** the container, from the root folder type:
 ```bash
 bash scripts/docker_run.sh
 ```
-To run the preprocessing and create the scheduler:
 
-```bash 
-bash s3_bucket/preprocessing.py 
-```
 
-notice: config file, test files and output examples are provided
-
-To train:
-
-```bash 
-bash s3_bucket/train_batch.py -d $day -i $iterations
-```
-
-notice: not working, must adapt training script (to be discussed)
-
-![img](workflow.png)
