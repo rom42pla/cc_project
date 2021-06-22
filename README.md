@@ -27,6 +27,16 @@ This script will iterate though each day (raw in scheduler.txt) and extract the 
 bash s3_bucket/train_scheduler.sh 
 ```
 
+
+#### Cosa caricare in S3 nella working directory:
+- run_preprocessing.sh
+- train_scheduler.sh
+- Oct.csv, Nov.csv, Dec.csv (piccoli da sostiuire con file interi)
+- config.txt
+- create_scheduler.py
+- preprocessing.py
+- train.py
+
 ![img](workflow.png)
 
 
