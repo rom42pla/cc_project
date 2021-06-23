@@ -5,6 +5,7 @@ from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 
 import recommender_system
+from datasets import preprocess_dataframe
 
 starting_time = time.time()
 
@@ -14,18 +15,19 @@ spark = SparkSession.builder.getOrCreate()
 sc = SparkContext.getOrCreate()
 
 # reads the dataframe
-df = spark.read.options(header='True', inferSchema='True', delimiter=',').csv(join(".", "dataset_sample.csv"))
-df = recommender_system.preprocess_dataframe(df=df)
-df.cache()
+df_path = join(".", "s3_bucket", "Dec.csv")
+df = spark.read.options(header='True', inferSchema='True', delimiter=',').csv(df_path)
+df = preprocess_dataframe(df=df)
+# df.cache()
 df.printSchema()
 print(f"|ratings| = {df.count()}, \t"
       f"|users| = {df.select('user_id').distinct().count()}, \t"
       f"|items| = {df.select('category_id').distinct().count()}")
-df.show(4)
+df.show()
 
 # training the model
-training, test = df.randomSplit([0.8, 0.2])
-model = recommender_system.train_recommender_system(df=training, iterations=10, logs=True)
+# training, test = df.randomSplit([0.8, 0.2])
+# model = recommender_system.train_recommender_system(df=training, iterations=10, logs=True)
 # model.save("model")
 
 total_time = time.time() - starting_time
