@@ -27,8 +27,11 @@ def assign_rating_from_views(df):
 def remapping(df,column):
     
     ''' ID small integers remapping '''
-    remapping = dict(zip(df[column].unique(),range(1,len(df[column].unique())+1)))
-    return df.replace({column: remapping})
+    min_id = min(df[column])
+    df[column] = df[column] - min_id
+    #remapping = dict(zip(df[column].unique(),range(1,len(df[column].unique())+1)))
+    #return df.replace({column: remapping})
+    return df
 
 
 
