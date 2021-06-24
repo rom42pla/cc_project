@@ -1,3 +1,5 @@
+from typing import Union, List
+
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import udf
 from pyspark.sql.types import IntegerType
@@ -22,23 +24,29 @@ def assign_rating_from_views(df: DataFrame):
     return df
 
 
-def remapping(df: DataFrame, column: str):
-    # maps all the values
-    unique_values = [row[column] for row in df.select(column).distinct().collect()]
-    remapping_dict = {
-        unique_value: i + 1
-        for i, unique_value in enumerate(unique_values)
-    }
-    # replaces the values in column
-    df = df.withColumn(column,
-                       udf(lambda value: remapping_dict[value], IntegerType())(df[column]))
+def remapping(df: DataFrame, columns: Union[str, List[str]]):
+    # eventually casts the columns to a list
+    if isinstance(columns, str):
+        columns = [columns]
+    # collect infos for each row
+    unique_values = [{
+        column: row[column]
+        for column in columns
+    } for row in df.select(columns).collect()]
+    for column in columns:
+        # maps each value to a number
+        remapping_dict = {
+            unique_value: i + 1
+            for i, unique_value in enumerate({v[column] for v in unique_values})
+        }
+        # replaces the values in column
+        df = df.withColumn(column,
+                           udf(lambda value: remapping_dict[value], IntegerType())(df[column]))
     return df
 
 
 def preprocess_dataframe(df: DataFrame):
     df = df.select("event_time", "user_id", "event_type", "category_id", "product_id")
-    df = remapping(df, "product_id")
-    df = remapping(df, "category_id")
-    df = remapping(df, "user_id")
+    df = remapping(df, ["category_id", "product_id", "user_id"])
     df = assign_rating_from_views(df)
     return df
