@@ -22,7 +22,7 @@ df = preprocess_dataframe(df=df)
 df.printSchema()
 print(f"|ratings| = {df.count()}, \t"
       f"|users| = {df.select('user_id').distinct().count()}, \t"
-      f"|items| = {df.select('category_id').distinct().count()}")
+      f"|items| = {df.select('product_id').distinct().count()}")
 df.show()
 
 # training the model

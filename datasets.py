@@ -2,7 +2,7 @@ from typing import Union, List
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import udf
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import IntegerType, LongType
 
 
 def assign_rating_from_views(df: DataFrame):
@@ -29,25 +29,28 @@ def remapping(df: DataFrame, columns: Union[str, List[str]]):
     if isinstance(columns, str):
         columns = [columns]
     # collect infos for each row
-    rows_list = [
-        [row[column] for column in columns]
-        for row in df.select(columns).collect()
-    ]
+    # rows_list = [
+    #     [row[column] for column in columns]
+    #     for row in df.select(columns).collect()
+    # ]
     for i_column, column in enumerate(columns):
-        unique_values = {row[i_column] for row in rows_list}
+        df = df.withColumn(column, df[column].cast(IntegerType()))
+        min_value = df.agg({column: "min"}).collect()[0][0]
+        # unique_values = {row[i_column] for row in rows_list}
+
         # maps each value to a number
-        remapping_dict = {
-            unique_value: i + 1
-            for i, unique_value in enumerate(unique_values)
-        }
+        # remapping_dict = {
+        #     unique_value: i + 1
+        #     for i, unique_value in enumerate(unique_values)
+        # }
         # replaces the values in column
         df = df.withColumn(column,
-                           udf(lambda value: remapping_dict[value], IntegerType())(df[column]))
+                           udf(lambda value: value - min_value, IntegerType())(df[column]))
     return df
 
 
 def preprocess_dataframe(df: DataFrame):
-    df = df.select("event_time", "user_id", "event_type", "category_id", "product_id")
-    df = remapping(df, ["category_id", "product_id", "user_id"])
+    df = df.select("event_time", "user_id", "event_type", "product_id")
+    df = remapping(df, ["product_id", "user_id"])
     df = assign_rating_from_views(df)
     return df
