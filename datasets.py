@@ -29,15 +29,16 @@ def remapping(df: DataFrame, columns: Union[str, List[str]]):
     if isinstance(columns, str):
         columns = [columns]
     # collect infos for each row
-    unique_values = [{
-        column: row[column]
-        for column in columns
-    } for row in df.select(columns).collect()]
-    for column in columns:
+    rows_list = [
+        [row[column] for column in columns]
+        for row in df.select(columns).collect()
+    ]
+    for i_column, column in enumerate(columns):
+        unique_values = {row[i_column] for row in rows_list}
         # maps each value to a number
         remapping_dict = {
             unique_value: i + 1
-            for i, unique_value in enumerate({v[column] for v in unique_values})
+            for i, unique_value in enumerate(unique_values)
         }
         # replaces the values in column
         df = df.withColumn(column,
