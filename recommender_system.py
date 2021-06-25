@@ -1,5 +1,6 @@
 import time
 
+from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.sql.functions import udf
 from pyspark.ml.recommendation import ALS
 from pyspark.sql.dataframe import DataFrame
@@ -21,3 +22,19 @@ def train_recommender_system(df: DataFrame,
         print(f"Training time: {int(total_time)}s")
 
     return model
+
+def evaluate_recommender_system(df: DataFrame,
+                                model,
+                                logs: bool = False):
+    starting__time = time.time()
+    if logs:
+        print(f"Starting evaluation of ALS model")
+
+    evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating",
+                                    predictionCol="prediction")
+    rmse = evaluator.evaluate(model.transform(df).na.drop())
+
+    total_time = time.time() - starting__time
+    if logs:
+        print(f"Evaluation time: {int(total_time)}s")
+        print(f"Root-mean-square error: {rmse}")
