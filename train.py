@@ -24,12 +24,12 @@ df.printSchema()
 print(f"|ratings| = {df.count()}, \t"
       f"|users| = {df.select('user_id').distinct().count()}, \t"
       f"|items| = {df.select('product_id').distinct().count()}")
-df.show()
+df.show(4)
 
 # training the model
 df_train, df_test = df.randomSplit([0.8, 0.2])
-model = recommender_system.train_recommender_system(df=df_train, iterations=10, logs=True)
-# model.save("model")
+model = recommender_system.train_recommender_system(df=df_train, iterations=10, k_fold=False, logs=True)
+model_path = recommender_system.save_model_zip(model=model, model_name="model", output_folder=".", logs=True)
 
 # evaluating the model
 rmse = recommender_system.evaluate_recommender_system(df=df_test, model=model, logs=True)
