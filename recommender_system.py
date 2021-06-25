@@ -13,7 +13,7 @@ def train_recommender_system(df: DataFrame,
     if logs:
         print(f"Starting training of ALS model")
 
-    als = ALS(maxIter=iterations, regParam=0.01, userCol="user_id", itemCol="category_id", ratingCol="rating")
+    als = ALS(maxIter=iterations, regParam=0.01, userCol="user_id", itemCol="product_id", ratingCol="rating")
     model = als.fit(df)
 
     total_time = time.time() - starting__time

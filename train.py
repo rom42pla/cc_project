@@ -2,6 +2,7 @@ import time
 from os.path import join
 
 from pyspark import SparkContext, SparkConf
+from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.sql import SparkSession
 
 import recommender_system
@@ -26,8 +27,8 @@ print(f"|ratings| = {df.count()}, \t"
 df.show()
 
 # training the model
-# training, test = df.randomSplit([0.8, 0.2])
-# model = recommender_system.train_recommender_system(df=training, iterations=10, logs=True)
+training, test = df.randomSplit([0.8, 0.2])
+model = recommender_system.train_recommender_system(df=training, iterations=10, logs=True)
 # model.save("model")
 
 total_time = time.time() - starting_time
