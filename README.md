@@ -1,13 +1,5 @@
 # Cloud Computing project
 
-## Who are we?
-
-| Name | Matricola |
-| --- | --- |
-| Martina Betti | 1799160 |
-| Federico Fontana | 1744946 |
-| Romeo Lanzino | 1753403 |
-| Stefania Sferragatta | 1948081 |
 
 ## How-tos
 
